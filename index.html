@@ -73,14 +73,6 @@
       margin-bottom: 8px;
     }
 
-    .new-post-content-container {
-      text-align: center;
-      background-color: rgba(255, 129, 129, 0.5);
-      border: 1px solid black;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-
     .post-profile-picture-container {
       padding-top: 5px;
       padding-right: 5px;
@@ -299,22 +291,15 @@
       var index = streams.home.length - 1;
       while (index >= 0) {
         var tweet = streams.home[index];
-        var dateTime = tweet.created_at; //hours, ex 2, 5, 14
-        var hours = dateTime.getHours().toString(); //minute, ex 5, 16, 35, 59
-        var minute = dateTime.getMinutes().toString(); //adds 0 to minute if it's a single digit
-        var minutes;
-        minute.length === 1 ? minutes = '0' + minute : minutes = minute;
-        var time = hours + ':' + minutes;
-        //var $tweet = $('<div></div>');
-        var $tweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + time + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
-        //$tweet.text('@' + tweet.user + ': ' + tweet.message);
-        $('#feed').prepend($tweet); //prepends single tweet into #feed div
+        var $tweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + tweet.created_at + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
+        $('#feed').prepend($tweet);
         index -= 1;
       }
     });
 
     $(document).ready(function () {
       $(".feed-handle").click(function () {
+        alert('clicked');
         //sets $handle to handle name (without @) on clicked handle
         var $handle = $(this).text().slice(1);
         $(".post-content-container").show();
@@ -325,32 +310,14 @@
 
     $(document).ready(function () {
       $("#refresh").click(function () {
-        //refresh tweets
-        //$(".post-content-container").remove();
-
         if (streamsHomeLength !== streams.home.length) {
-          console.log('expected length: ' + streamsHomeLength);
-          console.log('actual length: ' + streams.home.length);
-          
           for (var i = streamsHomeLength; i < streams.home.length; i++) {
             var tweet = streams.home[i];
-            var dateTime = tweet.created_at; //hours, ex 2, 5, 14
-            var hours = dateTime.getHours().toString(); //minute, ex 5, 16, 35, 59
-            var minute = dateTime.getMinutes().toString(); //adds 0 to minute if it's a single digit
-            var minutes;
-            minute.length === 1 ? minutes = '0' + minute : minutes = minute;
-            var time = hours + ':' + minutes;
-            console.log('tweet: ' + tweet);
-            var $newTweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + time + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
+            var $newTweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + tweet.created_at + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
             $('#feed').prepend($newTweet);
           }
-          
           streamsHomeLength = streams.home.length;
-          console.log('expected length updated');
         }
-        //reset where we pull tweets from
-        //$(document).ready(runStreams);
-        //console.log('Streams.home filled: ' + streams.home);
       });
     });
   </script>
