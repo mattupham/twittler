@@ -8,18 +8,20 @@
   <script src="jquery.js"></script>
   <script src="data_generator.js"></script>
   <style type="text/css">
-  
     /*NAVBAR*/
+
     .navbar {
       font-size: 15px;
       border-bottom: 1px solid gray;
       background-color: white;
     }
+
     .nav-icon {
       padding-right: 10px;
     }
 
     /*CONTENT*/
+
     #content {
       background-color: rgba(238, 251, 255, 0.5);
       height: 100vh;
@@ -28,6 +30,7 @@
     }
 
     /*PROFILE CARD*/
+
     #profile-card {
       border: 1px solid black;
       border-radius: 4px;
@@ -35,13 +38,16 @@
       background-color: rgba(129, 223, 255, .5);
       height: 100%;
     }
+
     #profile-card-name-container {
       padding-top: 5px;
       text-align: left;
     }
+
     #profile-card-picture-container {
       padding-top: 8px;
     }
+
     #profile-card-picture {
       width: 35px;
       height: 35px;
@@ -49,13 +55,16 @@
     }
 
     /*FEED*/
+
     #feed {
       font-size: 13px;
     }
+
     .post {
       float: left;
       padding-right: 5px;
     }
+
     .post-content-container {
       text-align: center;
       background-color: rgba(129, 223, 255, .5);
@@ -63,26 +72,39 @@
       border-radius: 4px;
       margin-bottom: 8px;
     }
+
+    .new-post-content-container {
+      text-align: center;
+      background-color: rgba(255, 129, 129, 0.5);
+      border: 1px solid black;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
     .post-profile-picture-container {
       padding-top: 5px;
       padding-right: 5px;
       text-align: right;
-      
+
     }
+
     #post-profile-picture {
       width: 60px;
       height: 60px;
       border-radius: 50%;
     }
+
     #check {
       height: 15px;
       width: 15px;
     }
+
     .post-text {
       clear: both;
       margin-top: 10px;
       text-align: left;
     }
+
     .post-info {
       margin-top: 5px;
     }
@@ -97,10 +119,12 @@
       height: 100%;
       padding-bottom: 5px;
     }
+
     .footer-info {
       float: left;
       padding-right: 10px;
     }
+
     .footer-info-list {
       margin-top: 5px;
     }
@@ -135,8 +159,8 @@
               <i class="nav-icon fa fa-home" aria-hidden="true"></i>Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="nav-icon fa fa-bolt" aria-hidden="true"></i>Moments</a>
+            <a class="nav-link" id="refresh" href="#">
+              <i class="nav-icon fa fa-bolt" aria-hidden="true"></i>Refresh</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
@@ -156,10 +180,12 @@
   </nav>
 
   <section id="content">
-    <div id="content-container" class="container">
-      <div class="row">
 
+    <div id="content-container" class="container">
+
+      <div class="row">
         <div id="profile-card" class="col-3 col-sm-3 text-center">
+
           <div class="row">
             <div id="profile-card-picture-container" class="col-md-4">
               <img id="profile-card-picture" src="images/mattupham.png">
@@ -171,6 +197,7 @@
               </ul>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-4">
               <ul class="list-unstyled">
@@ -190,6 +217,7 @@
                 <li>5</li>
               </ul>
             </div>
+
           </div>
         </div>
 
@@ -217,7 +245,6 @@
           </div>
         -->
         </div>
-
 
         <div id="footer" class="col-3 col-sm-3">
           <ul class="list-unstyled footer-info-list">
@@ -253,13 +280,6 @@
 
   </section>
 
-
-
-
-
-
-
-
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -270,46 +290,69 @@
     crossorigin="anonymous"></script>
 
   <script>
-      $(document).ready(function(){
+    var streamsHomeLength = streams.home.length;
+    //invokes runStreams once document is ready
+    $(document).ready(function(){
+      var $body = $('body');
+      //$body.html('');
+      var $postContentContainer = $('#post-content-container');
+      var index = streams.home.length - 1;
+      while (index >= 0) {
+        var tweet = streams.home[index];
+        var dateTime = tweet.created_at; //hours, ex 2, 5, 14
+        var hours = dateTime.getHours().toString(); //minute, ex 5, 16, 35, 59
+        var minute = dateTime.getMinutes().toString(); //adds 0 to minute if it's a single digit
+        var minutes;
+        minute.length === 1 ? minutes = '0' + minute : minutes = minute;
+        var time = hours + ':' + minutes;
+        //var $tweet = $('<div></div>');
+        var $tweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + time + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
+        //$tweet.text('@' + tweet.user + ': ' + tweet.message);
+        $('#feed').prepend($tweet); //prepends single tweet into #feed div
+        index -= 1;
+      }
+    });
 
-        var $body = $('body');
-        //$body.html('');
-        var $postContentContainer = $('#post-content-container');
+    $(document).ready(function () {
+      $(".feed-handle").click(function () {
+        //sets $handle to handle name (without @) on clicked handle
+        var $handle = $(this).text().slice(1);
+        $(".post-content-container").show();
+        //hides all other 
+        $(".post-content-container").not("." + $handle).hide();
+      });
+    });
 
-        var index = streams.home.length - 1;
-        console.log('index: ' + index);
-        console.log('streams.home: ' + streams.home);
-        while(index >= 0){
-          var tweet = streams.home[index];
+    $(document).ready(function () {
+      $("#refresh").click(function () {
+        //refresh tweets
+        //$(".post-content-container").remove();
+
+        if (streamsHomeLength !== streams.home.length) {
+          console.log('expected length: ' + streamsHomeLength);
+          console.log('actual length: ' + streams.home.length);
           
-          var dateTime = tweet.created_at;
-          //hours, ex 2, 5, 14
-          var hours = dateTime.getHours().toString();
-          //minute, ex 5, 16, 35, 59
-          var minute = dateTime.getMinutes().toString();
-          //adds 0 to minute if it's a single digit
-          var minutes;
-          minute.length === 1 ? minutes = '0' + minute : minutes = minute;
-          var time = hours + ':' + minutes;
-          //var $tweet = $('<div></div>');
-          var $tweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + time + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
-          //$tweet.text('@' + tweet.user + ': ' + tweet.message);
-          //prepends single tweet into #feed div
-          $('#feed').prepend($tweet);
-          index -= 1;
+          for (var i = streamsHomeLength; i < streams.home.length; i++) {
+            var tweet = streams.home[i];
+            var dateTime = tweet.created_at; //hours, ex 2, 5, 14
+            var hours = dateTime.getHours().toString(); //minute, ex 5, 16, 35, 59
+            var minute = dateTime.getMinutes().toString(); //adds 0 to minute if it's a single digit
+            var minutes;
+            minute.length === 1 ? minutes = '0' + minute : minutes = minute;
+            var time = hours + ':' + minutes;
+            console.log('tweet: ' + tweet);
+            var $newTweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + time + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
+            $('#feed').prepend($newTweet);
+          }
+          
+          streamsHomeLength = streams.home.length;
+          console.log('expected length updated');
         }
+        //reset where we pull tweets from
+        //$(document).ready(runStreams);
+        //console.log('Streams.home filled: ' + streams.home);
       });
-
-      $(document).ready(function(){
-        $(".feed-handle").click(function(){
-          //sets $handle to handle name (without @) on clicked handle
-          var $handle = $(this).text().slice(1);
-          //hides all other 
-          $(".post-content-container").not("." + $handle).hide();
-
-
-        });
-      });
+    });
   </script>
 </body>
 

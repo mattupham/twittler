@@ -4,6 +4,7 @@
  */
 
 // set up data structures
+
 window.streams = {};
 streams.home = [];
 streams.users = {};
