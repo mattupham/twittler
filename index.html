@@ -282,27 +282,37 @@
     crossorigin="anonymous"></script>
 
   <script>
+
+    function createTime(date) {
+      var output;
+      var hours = date.getHours().toString();
+      var min = date.getMinutes().toString();
+      min.length === 1 ? min = '0' + min : min;
+      output = hours + ':' + min;
+      parseInt(hours) >= 12 ? output += 'pm' : output += 'am';
+      return output;
+    }
+
     var streamsHomeLength = streams.home.length;
-    //invokes runStreams once document is ready
-    $(document).ready(function(){
+    //creates initial feed when funct
+    $(document).ready(function () {
       var $body = $('body');
       //$body.html('');
       var $postContentContainer = $('#post-content-container');
       var index = streams.home.length - 1;
       while (index >= 0) {
         var tweet = streams.home[index];
-        var $tweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + tweet.created_at + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
+        var $tweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + createTime(tweet.created_at) + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
         $('#feed').prepend($tweet);
         index -= 1;
       }
     });
 
     $(document).ready(function () {
-      $(".feed-handle").click(function () {
-        alert('clicked');
+      //uses .on function for dynamically added elements
+      $(document).on("click", ".feed-handle", function () {
         //sets $handle to handle name (without @) on clicked handle
         var $handle = $(this).text().slice(1);
-        $(".post-content-container").show();
         //hides all other 
         $(".post-content-container").not("." + $handle).hide();
       });
@@ -310,10 +320,14 @@
 
     $(document).ready(function () {
       $("#refresh").click(function () {
+        //if hidden, show
+        if ($('.post-content-container').is(':hidden')) {
+          $('.post-content-container').show();
+        }
         if (streamsHomeLength !== streams.home.length) {
           for (var i = streamsHomeLength; i < streams.home.length; i++) {
             var tweet = streams.home[i];
-            var $newTweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + tweet.created_at + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
+            var $newTweet = $('<div class="container post-content-container ' + tweet.user + '"><div class="row"><div class="col-4 post-profile-picture-container"><img id="post-profile-picture" src="images/mattupham.png"></div><div class="col-8"><ul class="list-unstyled post-info"><li class="post feed-name">First Last</li><li class="post feed-check"><img id="check" src="images/check.png"></li><li class="post feed-handle">@' + tweet.user + '</li><li class="post feed-dash">-</li><li class="post feed-time-elapsed">' + createTime(tweet.created_at) + '</li></ul><p class="post post-text">' + tweet.message + '</p></div></div></div>');
             $('#feed').prepend($newTweet);
           }
           streamsHomeLength = streams.home.length;
